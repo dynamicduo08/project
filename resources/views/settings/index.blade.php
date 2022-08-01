@@ -3,7 +3,7 @@
 @section('content')
 <main>
     <div class="container-fluid" id="app">
-        <h1 class="mt-4"><img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/settings.JPG') }}" alt="Patient Management">Settings</h1>
+        <h1 class="mt-4"><img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/settings.jpg') }}" alt="Patient Management">Settings</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Settings</li>
         </ol>
