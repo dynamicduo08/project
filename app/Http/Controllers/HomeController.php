@@ -20,7 +20,7 @@ class HomeController extends Controller
     private function sendMessage($message, $recipient)
     {
         $account_sid = 'AC03692c801cd5c6cde0ca0e215f32d80a';
-        $auth_token = 'f127bda91b8f37812bee44e76700bed8';
+        $auth_token = 'b4565be0566e1f1a3638f6560b620ad6';
         $twilio_number = '+19896933392';
         $client = new Client($account_sid, $auth_token);
         $client->messages->create($recipient, 
