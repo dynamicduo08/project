@@ -1,13 +1,15 @@
 <?php
 
 namespace Illuminate\Foundation\Auth;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SuccessfullyResetPassword;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
+use App\User;
 
 trait ResetsPasswords
 {
@@ -44,6 +46,7 @@ trait ResetsPasswords
         // database. Otherwise we will parse the error and return the response.
         $response = $this->broker()->reset(
             $this->credentials($request), function ($user, $password) {
+                Mail::to($user->email)->send(new SuccessfullyResetPassword($user));
                 $this->resetPassword($user, $password);
             }
         );
@@ -107,7 +110,7 @@ trait ResetsPasswords
         $user->setRememberToken(Str::random(60));
 
         $user->save();
-
+       
         event(new PasswordReset($user));
 
         $this->guard()->login($user);

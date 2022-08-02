@@ -53,7 +53,7 @@
                         <label for="date" class="col-md-4 col-form-label text-md-right">{{ __('Select Date') }}</label>
         
                         <div class="col-md-6">
-                          <input id="date" onchange='no_weekends(this.value)' min='{{date("Y-m-d")}}' onkeydown="return false;"  name="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" type="date" >
+                          <input id="date" onchange='no_weekends(this.value);getminutes();' min='{{date('Y-m-d', strtotime("+1 day", strtotime(date('Y-m-d'))))}}' onkeydown="return false;"  name="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" type="date" >
                         </div>
                         <br>
                     </div>
@@ -62,17 +62,18 @@
                         <label  class="col-md-2  col-form-label text-info">AM : <span id='available_am'>0</span> :  PM : <span id='available_pm'>0</span> </label>
                     
                     </div>
-                    <!-- <div class="form-group row">
+                    <div class="form-group row">
                         <label for="real_time" class="col-md-4 col-form-label text-md-right">{{ __('Select Time:') }}</label>
         
                         <div class="col-md-6">
-                            <input type="time" name="real_time" id="real_time" value="{{ old('real_time') }}"  min="09:00" max="17:00" class="form-control" required>
+                            <select name="real_time" id="real_time" class="form-control{{ $errors->has('time') ? ' is-invalid' : '' }}" required>
+                                <option value="" selected disabled>-- Select Time --</option>
+                            </select>
                         </div>
-                    </div> -->
+                    </div>
 
                     <div class="form-group row">
                         <label for="time" class="col-md-4 col-form-label text-md-right">{{ __('Select Period:') }}</label>
-        
                         <div class="col-md-6">
                             <select name="time" id="time" class="form-control{{ $errors->has('time') ? ' is-invalid' : '' }}" required>
                                 <option value="" selected disabled>-- Select Period --</option>
@@ -120,9 +121,10 @@
                 success: function(data){    
                     document.getElementById("available_am").innerHTML = data[0].am;
                     document.getElementById("available_pm").innerHTML = data[0].pm;
-
+                    var times = getminutes();
+                    // console.log(times);
                     $(".time-data").remove();
-                    if(data[0].am != 0)
+                     if(data[0].am != 0)
                     {
                     $("#time").append("<option class='time-data' value='AM'>AM</option>");
                     }
@@ -130,8 +132,12 @@
                     {
                     $("#time").append("<option class='time-data' value='PM'>PM</option>");
                     }
-
-
+                    for(i = 0;i < times.length;i++)
+                    {
+                        console.log(times[i]);
+                        $("#real_time").append("<option class='time-data' value='"+times[i]+"'>"+times[i]+"</option>");
+                    }
+                   
                 },
                 error: function(e)
                 {
@@ -140,6 +146,29 @@
             });
         }
         
+    }
+    function getminutes()
+    {
+        var x = 15; //minutes interval
+        var times = []; // time array
+        var tt = 540; // start time
+        var ap = ['AM', 'PM']; // AM-PM
+
+        //loop to increment the time and push results in array
+        for (var i=0;tt<17*60; i++) {
+        var hh = Math.floor(tt/60); // getting hours of day in 0-24 format
+        var mm = (tt%60); // getting minutes of the hour in 0-55 format
+        if(hh == 12)
+        {
+        times[i] = ("0" + (hh % 12)).slice(-2) + ':' + ("0" + mm).slice(-2) + " "+ ap[Math.floor(hh/12)]; // pushing data in array in [00:00 - 12:00 AM/PM format]
+        }
+        else
+        {
+        times[i] = ("0" + (hh % 12)).slice(-2) + ':' + ("0" + mm).slice(-2) + " "+ ap[Math.floor(hh/12)]; // pushing data in array in [00:00 - 12:00 AM/PM format]    
+        }
+        tt = tt + x;
+        }
+        return times;
     }
 </script>
 @include('layouts.dashboard.footer')

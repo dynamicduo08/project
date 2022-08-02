@@ -349,7 +349,6 @@
             typeof console !== 'undefined' &&
             console.warn
         ) {
-            console.warn('Deprecation warning: ' + msg);
         }
     }
 
@@ -26170,13 +26169,13 @@ var app = new __WEBPACK_IMPORTED_MODULE_1_vue___default.a({
     created: function created() {},
     mounted: function mounted() {
         var self = this;
-        this.$http.get('/userdetails').then(function (response) {
+        this.$http.get('userdetails').then(function (response) {
             // handle success
             self.user_data = response.data;
             // this.userdetails = 'test';
         }).catch(function (error) {
             // handle error
-            console.log(error);
+            // console.log(error);
         });
     }
 });
@@ -46124,20 +46123,13 @@ if (inBrowser) {
       if (devtools) {
         devtools.emit('init', Vue);
       } else {
-        console[console.info ? 'info' : 'log'](
-          'Download the Vue Devtools extension for a better development experience:\n' +
-          'https://github.com/vuejs/vue-devtools'
-        );
+      
       }
     }
     if (config.productionTip !== false &&
       typeof console !== 'undefined'
     ) {
-      console[console.info ? 'info' : 'log'](
-        "You are running Vue in development mode.\n" +
-        "Make sure to turn on production mode when deploying for production.\n" +
-        "See more tips at https://vuejs.org/guide/deployment.html"
-      );
+    
     }
   }, 0);
 }
@@ -50768,7 +50760,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
         this.activeView = this.initialView;
         this.activeDate = __WEBPACK_IMPORTED_MODULE_3_moment___default()(this.initialDate);
 
-        console.log('mounted');
+        // console.log('mounted');
 
         //  Bind events
         this.bindEvents();
@@ -54867,7 +54859,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         getPatientsList: function getPatientsList() {
             var self = this;
-            this.$http.get('/getPatientList').then(function (response) {
+            this.$http.get('getPatientList').then(function (response) {
                 // handle success
                 self.patients_list = response.data;
                 // $('#dataTable').DataTable();
@@ -55211,7 +55203,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     getAppointments: function getAppointments() {
       var self = this;
-      this.$http.get('/get-appointments').then(function (response) {
+      this.$http.get('get-appointments').then(function (response) {
         // handle success
         self.appointments = response.data;
       }).catch(function (error) {
@@ -55267,7 +55259,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     getPatientsList: function getPatientsList() {
       var self = this;
-      this.$http.get('/getPatientList').then(function (response) {
+      this.$http.get('getPatientList').then(function (response) {
         // handle success
         var patients = response.data;
         var tempdata = {};
@@ -55283,7 +55275,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     getDoctorsList: function getDoctorsList() {
       var self = this;
-      this.$http.get('/getDoctorsList').then(function (response) {
+      this.$http.get('getDoctorsList').then(function (response) {
         // handle success
         var doctors = response.data;
         var tempdata = {};
@@ -55353,7 +55345,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var app_data =this.appointments. reverse();
 
      app_data.forEach(function (item, index) {
-      console.log(item.status);
       if(item.status == 1)
       {
       if(item.time == "AM")
@@ -55369,7 +55360,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           // startTime: (item.time == 'AM') ? "08:00" : '13:00',
           // endTime: (item.time == 'AM') ? "12:00" : '17:00',
           name: item.patient.name,
-          comments: item.doctor.doctor_details.fullname + ' ' + greetings,
+          comments: item.patient.name+"\n"+item.doctor.doctor_details.fullname + '\n' + greetings + '\n' + item.real_time,
           customAttribute: "I'm a custom attribute"
         });
       }
@@ -55582,7 +55573,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "a",
-      { staticClass: "btn btn-info", attrs: { href: "/appointments/create" } },
+      { staticClass: "btn btn-info", attrs: { href: "appointments/create" } },
       [_c("i", { staticClass: "fa fa-plus" }), _vm._v(" Create Appointment")]
     )
   },

@@ -8,7 +8,7 @@
         <div class="form-group">
           <button class="btn btn-info" @click="toggleView" v-if="!calendar_view"><i class="fa fa-calendar"></i> Calendar View</button>
           <button class="btn btn-info" @click="toggleView" v-else><i class="fa fa-list" ></i> List View</button>
-          <a href="/appointments/create" class="btn btn-info"><i class="fa fa-plus"></i> Create Appointment</a>
+          <a href="url('/appointments/create')" class="btn btn-info"><i class="fa fa-plus"></i> Create Appointment</a>
         </div>
         
         <div class="table-responsive" v-if="!calendar_view">

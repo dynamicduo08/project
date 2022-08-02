@@ -60,7 +60,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/patients-list/medical-history/create/{id}','PatientController@createMedicalHistory')->name('create-medical-history');
     Route::post('/patients-list/medical-history/save','PatientController@saveMedicalHistory')->name('save-medical-history');
 
-    Route::get('/userdetails', function(){
+    Route::get('userdetails', function(){
+        return Auth::user();
+    });
+    Route::get('/appointments/userdetails', function(){
         return Auth::user();
     });
 

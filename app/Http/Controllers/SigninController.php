@@ -34,11 +34,13 @@ class SigninController extends Controller
     {
         // dd($request->all());
         $user = User::where('email',$request->email)->first();
-        if (!$user->verified) {
-            // auth()->logout();
-            return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
+        if($user != null)
+        {
+            if (!$user->verified) {
+                // auth()->logout();
+                return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
+            }
         }
-
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {

@@ -14386,7 +14386,6 @@ module.exports = __webpack_amd_options__;
     return i.default.fn.toast = me, _e._jQueryInterface;
   }, t.Alert = d, t.Button = h, t.Carousel = y, t.Collapse = S, t.Dropdown = Ft, t.Modal = Bt, t.Popover = se, t.Scrollspy = ce, t.Tab = pe, t.Toast = _e, t.Tooltip = te, t.Util = l, Object.defineProperty(t, "__esModule", { value: !0 });
 });
-//# sourceMappingURL=bootstrap.bundle.min.js.map
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })

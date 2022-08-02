@@ -45,21 +45,15 @@ class AppointmentController extends Controller
     }
 
     public function saveAppointment(Request $request){
-       // check appointment avaialability
-    //    dd($request->all());
 
        $time_data = date('A',strtotime($request->real_time));
-    //    dd($time_data);
        $schedule = Appointment::where('date','=',$request->date)
        ->where('time','=',$request->time)
         ->where(function ($query) use ($time_data) {
             $query->where('status','=',1)
             ->orwhere('status','=',0);
         })
-    //    ->where('status','=',1) // approved appointment
        ->count();
-
-        // dd($schedule);
 
 
         $sameTimeDoctor = Appointment::where('date','=',$request->date)
