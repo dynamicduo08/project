@@ -46,4 +46,8 @@ class User extends Authenticatable
     public function employeeDetails(){
         return $this->hasOne('App\Employee','user_id');
     }
+    public function verifyUser()
+    {
+        return $this->hasOne('App\VerifyUser');
+    }
 }

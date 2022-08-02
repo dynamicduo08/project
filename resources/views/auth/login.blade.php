@@ -30,6 +30,16 @@
                                             @if (session('error'))
                                                 <center><h6 style="color: red">{{ session('error') }}</h6></center>
                                             @endif
+                                            @if (session('status'))
+                                                <div class="alert alert-success">
+                                                    {{ session('status') }}
+                                                </div>
+                                            @endif
+                                            @if (session('warning'))
+                                                <div class="alert alert-warning">
+                                                    {{ session('warning') }}
+                                                </div>
+                                            @endif
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
                                                 <input class="form-control py-4 {{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus id="inputEmailAddress" type="email" placeholder="Enter email address" />

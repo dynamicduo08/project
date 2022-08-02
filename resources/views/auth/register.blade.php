@@ -16,7 +16,12 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -152,9 +157,12 @@
             
                                     <div class="form-group row">
                                         <label for="dob" class="col-md-4 col-form-label text-md-right">{{ __('Date of Birth') }}</label>
-            
+                                        @php
+                                            $date_year = date('Y')-120;
+                                            $date = $date_year.date('-m-d');
+                                        @endphp
                                         <div class="col-md-6">
-                                          <input id="dob" name="dob" class="form-control{{ $errors->has('dob') ? ' is-invalid' : '' }}" type="date" value="{{ old('dob') }}">
+                                          <input id="dob" name="dob" class="form-control{{ $errors->has('dob') ? ' is-invalid' : '' }}" onchange='onchangeBirthDate(value);' max='{{date('Y-m-d')}}' type="date" min={{$date}} value="{{ old('dob') }}">
                                         </div>
             
                                         @if ($errors->has('dob'))
@@ -166,10 +174,23 @@
                                     </div>
             
                                     <div class="form-group row">
+                                        <label for="age" class="col-md-4 col-form-label text-md-right">{{ __('Age') }}</label>
+            
+                                        <div class="col-md-6">
+                                            <input id="age" type="number" class="form-control{{ $errors->has('age') ? ' is-invalid' : '' }}"  name="age" value="{{ old('age') }}" required autofocus readonly>
+            
+                                            @if ($errors->has('age'))
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $errors->first('age') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label for="gender" class="col-md-4 col-form-label text-md-right">{{ __('Gender') }}</label>
             
                                         <div class="col-md-6">
-                                            <select name="gender" id="gender" class="form-control{{ $errors->has('gender') ? ' is-invalid' : '' }}" name="gender" value="{{ old('gender') }}" required autofocus>
+                                            <select name="gender" id="gender" class="form-control{{ $errors->has('gender') ? ' is-invalid' : '' }}"   name="gender" value="{{ old('gender') }}" required autofocus>
                                                 <option value="" disabled>-- Select gender --</option>
                                                 <option value="male">Male</option>
                                                 <option value="female">Female</option>
@@ -182,6 +203,7 @@
                                             @endif
                                         </div>
                                     </div>
+
 
                                     <div class="form-group row">
                                         <label for="civil_status" class="col-md-4 col-form-label text-md-right">{{ __('Civil Status') }}</label>
@@ -203,19 +225,6 @@
                                         </div>
                                     </div>
             
-                                    <div class="form-group row">
-                                        <label for="age" class="col-md-4 col-form-label text-md-right">{{ __('Age') }}</label>
-            
-                                        <div class="col-md-6">
-                                            <input id="age" type="number" class="form-control{{ $errors->has('age') ? ' is-invalid' : '' }}" name="age" value="{{ old('age') }}" required autofocus>
-            
-                                            @if ($errors->has('age'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('age') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
             
                                     <div class="form-group row">
                                         <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Address') }}</label>
@@ -305,8 +314,16 @@
                                         </div>
                                     </div>
                                     
-            
-                                    <div class="form-group row mb-0">
+                                    <div class="form-group row mb-3 ">
+                                        <div class="col-md-12 offset-md-12 text-center">
+                                            <div class="field-wrapper pt-10 pb-10 center form-check ">
+                                                <input type="checkbox" id="checkbox_1" style="width:3%;" class="checkbox-label" required="">	
+                                                <label for="" class="checkbox-label " style="margin-left:0rem;">  	
+                                                    I agree to the <a  class="lightbox-link"class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><b>Terms and Conditions</b></a> </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-0 text-center">
                                         <div class="col-md-6 offset-md-4">
                                             <button type="submit" class="btn btn-primary">
                                                 {{ __('Register') }}
@@ -314,6 +331,11 @@
                                         </div>
                                     </div>
                                 </form>
+                                <!-- Modal -->
+                           <!-- Button trigger modal -->
+                            
+                            <!-- Modal -->
+                                @include('data_privacy')
                             </div>
                         </div>
                     </div>
@@ -321,6 +343,19 @@
             </div>
         </main>
     </div>
+    <script>
+        function getAge(dateString) {
+        var ageInMilliseconds = new Date() - new Date(dateString);
+        return Math. floor(ageInMilliseconds/1000/60/60/24/365); // convert to years.
+        }
+        function onchangeBirthDate(birthdate)
+        {
+            var age = getAge(birthdate);
+            document.getElementById("age").value = age;
+        }
+    </script>
+
+
 </body>
 </html>
 

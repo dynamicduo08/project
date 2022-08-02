@@ -35,11 +35,11 @@
                                     <td>
                                         @if($user->status == "Deactivated")
                                             <label class='text-danger'>Deactivated</label>
-                                            <a href="{{ route('activate-user',$user->id) }}"><button class="btn btn-success" title="Activate"><i class="fa fa-check"></i> Activate</button></a>
+                                            <a href="{{ route('activate-user',$user->id) }}"><button class="btn btn-success" title="Activate"><i class="fa fa-check"></i></button></a>
 
                                         @else
-                                            <a href="{{ route('edit-user',$user->id) }}"><button class="btn btn-info" title="Edit"><i class="fa fa-edit"></i> Edit</button></a>
-                                            <a href="{{ route('delete-user', $user->id) }}"><button class="btn btn-danger" title="Deactivate"><i class="fa fa-trash"></i> Deactivate</button></a>
+                                            <a href="{{ route('edit-user',$user->id) }}"><button class="btn btn-info" title="Edit"><i class="fa fa-edit"></i></button></a>
+                                            <a href="{{ route('delete-user', $user->id) }}"><button class="btn btn-danger" title="Deactivate"><i class="fa fa-window-close"></i></button></a>
                                         @endif
                                     </td>
                                     <td>{{ $user->name }}</td>

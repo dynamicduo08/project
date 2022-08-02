@@ -176,3 +176,6 @@ Route::middleware('auth')->group(function () {
 
 });
 
+Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
+
+

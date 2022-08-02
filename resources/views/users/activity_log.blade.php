@@ -20,6 +20,7 @@
                             <tr>
                                 <th>Log ID</th>
                                 <th>User</th>
+                                <th>Type</th>
                                 <th>Activity</th>
                                 <th>Date and Time</th>
                             </tr>
@@ -29,6 +30,7 @@
                             <tr>
                                 <td>{{ $activity->id }}</td>
                                 <td>{{ $activity->user->name }}</td>
+                                <td>{{ $activity->user->usertype->name }}</td>
                                 <td>{{ $activity->activity }}</td>
                                 <td>{{ \Carbon\Carbon::parse($activity->created_at)->format('M d, Y, h:m a')}}</td>
                             </tr>

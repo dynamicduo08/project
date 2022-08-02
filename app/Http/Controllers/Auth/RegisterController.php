@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyMail;
 use App\User;
+use App\VerifyUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -101,6 +103,13 @@ class RegisterController extends Controller
             'contact_number' => $data['mobile'],
             'password' => Hash::make($data['password']),
         ]);
+        // dd($user);
+        $verifyUser = VerifyUser::create([
+            'user_id' => $user->id,
+            'token' => str_random(40)
+        ]);
+
+        Mail::to($user->email)->send(new VerifyMail($user));
 
         PatientDetail::create([
             'user_id' => $user->id,
@@ -116,7 +125,25 @@ class RegisterController extends Controller
             'emergency_number' => $data['emergency_number'],
             'emergency_address' => $data['emergency_address']
         ]);
-
         return $user;
+    }
+
+    public function verifyUser($token)
+    {
+        $verifyUser = VerifyUser::where('token', $token)->first();
+        if(isset($verifyUser) ){
+            $user = $verifyUser->user;
+            if(!$user->verified) {
+                $verifyUser->user->verified = 1;
+                $verifyUser->user->save();
+                $status = "Your e-mail is verified. You can now login.";
+            }else{
+                $status = "Your e-mail is already verified. You can now login.";
+            }
+        }else{
+            return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
+        }
+        // dd($status);
+        return redirect('/login')->with('status', $status);
     }
 }

@@ -59,6 +59,7 @@ return array(
     'App\\Transaction' => $baseDir . '/app/Transaction.php',
     'App\\User' => $baseDir . '/app/User.php',
     'App\\UserType' => $baseDir . '/app/UserType.php',
+    'App\\VerifyUser' => $baseDir . '/app/VerifyUser.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'Carbon\\Carbon' => $vendorDir . '/nesbot/carbon/src/Carbon/Carbon.php',
     'Carbon\\CarbonInterval' => $vendorDir . '/nesbot/carbon/src/Carbon/CarbonInterval.php',

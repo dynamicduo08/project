@@ -19,9 +19,9 @@ class SigninController extends Controller
         $account_sid = 'AC03692c801cd5c6cde0ca0e215f32d80a';
         $auth_token = 'b4565be0566e1f1a3638f6560b620ad6';
         $twilio_number = '+19896933392';
-        $client = new Client($account_sid, $auth_token);
-        $client->messages->create($recipient, 
-                ['from' => $twilio_number, 'body' => $message] );
+        // $client = new Client($account_sid, $auth_token);
+        // $client->messages->create($recipient, 
+        //         ['from' => $twilio_number, 'body' => $message] );
     }
     /**
      * Handle an authentication attempt.
@@ -32,6 +32,13 @@ class SigninController extends Controller
      */
     public function authenticate(Request $request)
     {
+        // dd($request->all());
+        $user = User::where('email',$request->email)->first();
+        if (!$user->verified) {
+            // auth()->logout();
+            return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
+        }
+
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
@@ -41,7 +48,7 @@ class SigninController extends Controller
             $user[0]->otp = $otp;
             $user[0]->save();
 
-            $this->sendMessage('Your Megason Diagnostic Clinics account was logged in. To proceed, ' . $user[0]->otp . ' is your OTP.', $user[0]->contact_number);
+            $this->sendMessage("Your Megason Diagnostic Clinics account was logged in. To proceed, ' . $user[0]->otp . ' is your OTP. \n Don't share this with anyone. This will expire in 60 minutes.", $user[0]->contact_number);
 
             return redirect()->intended('home');
         }else{

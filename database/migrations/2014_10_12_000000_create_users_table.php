@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('type');
             $table->rememberToken();
             $table->timestamps();
+            $table->boolean('verified')->default(false);
         });
     }
 

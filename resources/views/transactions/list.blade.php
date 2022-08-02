@@ -26,10 +26,8 @@
                                 <th>Patient Name</th>
                                 <th>Doctor Name</th>
                                 <th>Appointment Date</th>
-                                <!-- <th>Doctor's Fee</th> -->
-                                <th>Lab Fee</th>
-                                <th>Total Amount</th>
-                                <th>Discount (%)</th>
+                                <th>Procedures - Price</th>
+                                {{-- <th>Discount (%)</th> --}}
                                 <th>Status</th>
                                 <th>Date</th>
                             </tr>
@@ -39,23 +37,38 @@
                             @foreach($data['transactions'] as $transaction)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('view-transaction', $transaction->id) }}"><button class="btn btn-info"><i class="fa fa-file"></i></button></a>
-                                        <a href="{{ route('edit-transaction',$transaction->id) }}"><button class="btn btn-info" title="Edit"><i class="fa fa-edit"></i> Edit</button></a>
-                                        <a href="{{ route('delete-transaction', $transaction->id) }}"><button class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i> Delete</button></a>
+                                        <a href="{{ route('view-transaction', $transaction->id) }}"><button class="btn btn-info" title='View Transaction'><i class="fa fa-file"></i></button></a>
+                                        <a href="{{ route('edit-transaction',$transaction->id) }}"><button class="btn btn-info" title="Edit"><i class="fa fa-edit"></i> </button></a>
+                                        <a href="{{ route('delete-transaction', $transaction->id) }}"><button class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i> </button></a>
                                         @if($transaction->status != 'paid')
                                             <a href="{{ route('mark-as-paid', $transaction->id) }}"><button class="btn btn-info" title="Mark as Paid"><i class="fa fa-coins"></i> Mark Paid</button></a>
                                         @else
-                                            <a href="{{ route('mark-as-paid', $transaction->id) }}"><button class="btn btn-info" title="Mark as Paid" disabled><i class="fa fa-coins"></i> Mark Paid</button></a>
+                                            <a href="{{ route('mark-as-paid', $transaction->id) }}"><button class="btn btn-success" title="Mark as Paid" disabled><i class="fa fa-coins"></i> Paid</button></a>
                                         @endif
                                     </td>
                                     <td>{{ str_pad($transaction->id, 6, '0', STR_PAD_LEFT) }}</td>
                                     <td>{{ $transaction->patient->name }}</td>
                                     <td>{{ $transaction->doctor->name }}</td>
-                                    <td>{{ $transaction->appointment->date }}</td>
-                                    <!-- <td>{{ $transaction->doctor_fee }}</td> -->
-                                    <td>{{ $transaction->lab_fee }}</td>
-                                    <td>{{ $transaction->total_amount }}</td>
-                                    <td>{{ ($transaction->discount) ? $transaction->discount : '0' }}%</td>
+                                    <td>{{ date('M d, Y',strtotime($transaction->appointment->date)) }}</td>
+                                    <td >
+                                        <small>
+                                        {{-- {{ $transaction->procedures }} --}}
+                                        @foreach($transaction->procedures  as $procedure)
+                                            {{$procedure->name}} - <i>{{number_format($procedure->price,2)}} </i><br>
+                                        @endforeach
+                                       Senior/PWD Discount : {{ ($transaction->discount) ? $transaction->discount : '0' }}%  - <i>{{ ($transaction->discount) ? number_format($transaction->procedures->sum('price')*.20,2) : number_format(0.00,2) }}</i><br>
+                                       Tax : {{ ($transaction->discount) ? '0' : '12' }}% - <i>{{ ($transaction->discount) ?  number_format(0.00,2) : number_format($transaction->procedures->sum('price')*.12,2) }}</i>
+                                       <hr>
+                                       @php
+                                           $amount = $transaction->procedures->sum('price');
+                                           $discount = ($transaction->discount) ? ($transaction->procedures->sum('price')*.20) : 0.00;
+                                           $tax = ($transaction->discount) ? 0.00 : ($transaction->procedures->sum('price')*.12);
+
+                                       @endphp
+                                       Total Amount = <strong> {{ number_format($amount-$discount+$tax,2) }}</strong>
+                                        </small>
+                                    </td>
+                                    {{-- <td></td> --}}
                                     <td>{{ $transaction->status }}</td>
                                     <td>{{ $transaction->created_at->diffForHumans() }}</td>
                                 </tr>
