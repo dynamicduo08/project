@@ -25,15 +25,13 @@ trait TranslatorTrait
     /**
      * {@inheritdoc}
      */
-    public function setLocale(string $locale)
+    public function setLocale($locale)
     {
-        $this->locale = $locale;
+        $this->locale = (string) $locale;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
     public function getLocale()
     {
@@ -43,9 +41,9 @@ trait TranslatorTrait
     /**
      * {@inheritdoc}
      */
-    public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null): string
+    public function trans($id, array $parameters = [], $domain = null, $locale = null)
     {
-        if (null === $id || '' === $id) {
+        if ('' === $id = (string) $id) {
             return '';
         }
 
@@ -54,7 +52,7 @@ trait TranslatorTrait
         }
 
         $number = (float) $parameters['%count%'];
-        $locale = $locale ?: $this->getLocale();
+        $locale = (string) $locale ?: $this->getLocale();
 
         $parts = [];
         if (preg_match('/^\|++$/', $id)) {
@@ -142,7 +140,7 @@ EOF;
     {
         $number = abs($number);
 
-        switch ('pt_BR' !== $locale && \strlen($locale) > 3 ? substr($locale, 0, strrpos($locale, '_')) : $locale) {
+        switch ('pt_BR' !== $locale && 'en_US_POSIX' !== $locale && \strlen($locale) > 3 ? substr($locale, 0, strrpos($locale, '_')) : $locale) {
             case 'af':
             case 'bn':
             case 'bg':
@@ -151,6 +149,7 @@ EOF;
             case 'de':
             case 'el':
             case 'en':
+            case 'en_US_POSIX':
             case 'eo':
             case 'es':
             case 'et':
