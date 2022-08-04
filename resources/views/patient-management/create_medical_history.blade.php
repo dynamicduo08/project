@@ -77,7 +77,7 @@
                 <label for="next_visit" class="col-md-4 col-form-label text-md-right">{{ __('Date of Next Visit') }}</label>
 
                 <div class="col-md-6">
-                  <input id="next_visit" name="next_visit" class="form-control{{ $errors->has('next_visit') ? ' is-invalid' : '' }}" type="date" value="{{ date('Y-m-d',strtotime($data['patientDetail']['date_of_birth'])) }}" required>
+                  <input id="next_visit" name="next_visit" class="form-control{{ $errors->has('next_visit') ? ' is-invalid' : '' }}" type="date" min='{{date('Y-m-d', strtotime("+1 day", strtotime(date('Y-m-d'))))}}' required>
                 </div>
 
                 @if ($errors->has('next_visit'))

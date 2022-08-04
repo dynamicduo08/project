@@ -30,6 +30,7 @@ class AppointmentController extends Controller
     }
 
     public function getList(){
+        // return 'renz';
         if(Auth::user()->type == 2){
             // if doctor, show all schedules for the doctor
             return Appointment::where('doctor_id',Auth::user()->id)->with('doctor.doctorDetails','patient.patientDetails')->get();
@@ -45,10 +46,12 @@ class AppointmentController extends Controller
     }
 
     public function saveAppointment(Request $request){
-
+        // dd($request->all());
+        $explode_realtime = explode(" ", $request->real_time);
+        $time = $explode_realtime[1];
        $time_data = date('A',strtotime($request->real_time));
        $schedule = Appointment::where('date','=',$request->date)
-       ->where('time','=',$request->time)
+       ->where('time','=',$time)
         ->where(function ($query) use ($time_data) {
             $query->where('status','=',1)
             ->orwhere('status','=',0);
@@ -59,8 +62,8 @@ class AppointmentController extends Controller
         $sameTimeDoctor = Appointment::where('date','=',$request->date)
             ->where("doctor_id",$request->doctor_id)
             ->where('user_id',$request->patient_id)
-            ->where(function ($query) use ($request) {
-                $query->where('time','=',$request->time)
+            ->where(function ($query) use ($request,$time) {
+                $query->where('time','=',$time)
                 ->orwhere('real_time','=',$request->real_time);
             })
             ->where(function ($query) use ($time_data) {
@@ -70,7 +73,7 @@ class AppointmentController extends Controller
             ->count();
 
         $settings = Setting::find(1);
-        $limit = ($request->time == 'AM') ? $settings->am_limit : $settings->pm_limit;
+        $limit = ($time == 'AM') ? $settings->am_limit : $settings->pm_limit;
 
 
         // validate date
@@ -98,7 +101,7 @@ class AppointmentController extends Controller
                         'user_id'   => $request->patient_id,
                         'date'      => $request->date,
                         'real_time' => $request->real_time,
-                        'time'      => $request->time,
+                        'time'      => $time,
                         'status'    => 0, // not yet approved
                     ]);
                     
@@ -165,15 +168,19 @@ class AppointmentController extends Controller
     }
 
     public function checkAvailableSchedule(Request $request){
+
+        // return $request->all();
         $am_limit = Setting::all()[0]->am_limit;
         $pm_limit = Setting::all()[0]->pm_limit;
         
         $schedule = Appointment::where('date','=',$request->date)
+                                ->where('doctor_id',$request->doctor_id)
+                                ->where('user_id',$request->patient_id)
                                 ->where(function ($query){
                                     $query->where('status','=',1)
                                     ->orwhere('status','=',0);
                                 }) // approved appointment or pending
-                                ->get();
+                                ->get()->pluck('real_time');
 
         $schedule_am = $schedule->where('time','AM')->count();
         $schedule_pm = $schedule->where('time','PM')->count();
@@ -183,7 +190,7 @@ class AppointmentController extends Controller
                 'am' => $am_limit-$schedule_am,
                 'pm' => $pm_limit-$schedule_pm
         ]);
-        return $data;   
+        return $schedule;   
     }
 
     public function create(){

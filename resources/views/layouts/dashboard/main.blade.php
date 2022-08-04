@@ -25,10 +25,27 @@
                 top: 0;
                 width: auto;
             }
+            .loader {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url("{{ asset('/images/3.gif')}}") 50% 50% no-repeat rgb(249,249,249) ;
+            opacity: .8;
+            background-size:200px 120px;
+        }
+        .space 
+        {
+            white-space: pre;
+        }
         </style>
 
     </head>
     <body class="sb-nav-fixed">
+        <div id = "myDiv" style="display:none;" class="loader">
+        </div>
         @include('sweetalert::alert')
         @include('layouts.dashboard.navbar')
 
@@ -45,7 +62,12 @@
 
 
         </div>
-
+        <script type='text/javascript'>
+            function show()
+            {
+                document.getElementById("myDiv").style.display="block";
+            }
+        </script>
         <script src="{{ asset('js/app.js') }}"></script>        
         <script src="{{ asset('js/dependencies.js') }}"></script>
         <script src="{{ asset('js/jquery.js') }}"></script> 
@@ -69,6 +91,7 @@
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 {{-- <script src="{{ asset('assets/demo/datatables-demo.js') }}"></script> --}}
         <script type="text/javascript">
+        
         $(function() {
             $('#dataTable').DataTable({
                 dom: 'fBrtip',
