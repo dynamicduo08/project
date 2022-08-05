@@ -255,7 +255,7 @@ class EmployeeController extends Controller
         $employee = Employee::where('user_id', Auth::user()->id)->get();
 
         $date_now = Carbon::now()->format('Y-m-d');
-        $time_now = Carbon::now()->format('H:m');
+        $time_now = date('H:i');
         // check if time in exists for the day
         $attendance = Attendance::where('employee_id', $employee[0]->id)
                                 ->where('date',$date_now)
@@ -280,7 +280,7 @@ class EmployeeController extends Controller
                 'activity' => 'Submitted an attendance time-in'
             ]);
 
-            Alert::success('', 'Time in recorded at ' . Carbon::now()->format('g:i A') . '!');
+            Alert::success('', 'Time in recorded at ' . date('h:i a',strtotime($time_now)) . '!');
             return redirect()->back();
         }
     }
@@ -290,7 +290,7 @@ class EmployeeController extends Controller
         $employee = Employee::where('user_id', Auth::user()->id)->get();
 
         $date_now = Carbon::now()->format('Y-m-d');
-        $time_now = Carbon::now()->format('H:m');
+        $time_now = date('H:i');
         // check if time in exists for the day
         $timeIn = Attendance::where('employee_id', $employee[0]->id)
                                 ->where('date',$date_now)
@@ -323,7 +323,7 @@ class EmployeeController extends Controller
                     'activity' => 'Submitted an attendance time-out'
                 ]);
     
-                Alert::success('', 'Time out recorded at ' . Carbon::now()->format('g:i A') . '!');
+                Alert::success('', 'Time out recorded at ' . date('h:i a',strtotime($time_now)) . '!');
                 return redirect()->back();
             }else{
                 // wala pa IN

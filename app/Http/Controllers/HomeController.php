@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\User;
 use App\Attendance;
+use App\Employee;
 use App\ActivityLog;
 use RealRashid\SweetAlert\Facades\Alert;
 use Twilio\Rest\Client;
@@ -70,7 +71,12 @@ class HomeController extends Controller
                 return view('home_otp');
                 
             }else{
+                // dd("renz");
                 $user = User::where('id', Auth::user()->id)->with('usertype','usertype.permissions')->get();
+                $employee = Employee::where('user_id', Auth::user()->id)->first();
+                $attendance = Attendance::where('employee_id', $employee->id)
+                ->where('date',date('Y-m-d'))
+                ->get();
                 $permissions = [];
                 foreach($user[0]->usertype->permissions as $permission)
                 {
@@ -79,15 +85,21 @@ class HomeController extends Controller
                 
                 $data = array(
                     'permissions' => $permissions,
-                    'user'        => $user
+                    'user'        => $user,
+                    'attendance'        => $attendance,
+
                 );
 
                 ActivityLog::create([
                     'user_id' => Auth::user()->id,
-                    'activity' => 'Login'
+                    'activity' => 'Login',
                 ]);
 
-                return view('home')->with('data',$data);
+                return view('home',array(
+                    'data'=>$data,
+                    'attendance'=>$attendance,
+
+                ));
             }
             
         }

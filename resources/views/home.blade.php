@@ -13,12 +13,25 @@
                 <h4>Welcome {{ $data['user'][0]->name }}</h4>
                 @if(Auth::user()->type != 1 && Auth::user()->type != 3)
                 <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    @if($attendance->where('type','IN')->first() == null)
                     <div class="btn-group mr-2" role="group" aria-label="First group">
-                      <a href="{{ route('time-in') }}"><button type="button" class="btn btn-secondary"><i class="fas fa-clock"></i> TIME IN</button></a>
+                        <a href="{{ route('time-in') }}" onclick='show();'><button type="button" class="btn btn-secondary"><i class="fas fa-clock"></i> TIME IN</button></a>
                     </div>
+                    @else
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        <i >Time In &nbsp;</i>:&nbsp;<b class='text-success'> {{date('h:i a',strtotime($attendance->where('type','IN')->first()->time))}} </b>
+                    </div>
+                    {{-- {{dd($attendance->where('type','OUT'))}} --}}
+                    @if($attendance->where('type','OUT')->first() == null)
                     <div class="btn-group mr-2" role="group" aria-label="Second group">
-                      <a href="{{ route('time-out') }}"><button type="button" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> TIME OUT</button></a>
+                        <a href="{{ route('time-out') }}" onclick='show();'><button type="button" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> TIME OUT</button></a>
                     </div>
+                    @else
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        <i >Time Out &nbsp;:&nbsp; </i> <b class='text-success'> {{date('h:i a',strtotime($attendance->where('type','OUT')->first()->time))}} </b>
+                    </div>
+                    @endif
+                    @endif
                 </div>
                 @endif
                 <hr>
