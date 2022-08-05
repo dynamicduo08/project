@@ -7,6 +7,7 @@ use App\User;
 use App\PatientDetail;
 use App\Appointment;
 use App\Setting;
+use App\DoctorSchedule;
 use App\Transaction;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
@@ -182,15 +183,21 @@ class AppointmentController extends Controller
                                 }) // approved appointment or pending
                                 ->get()->pluck('real_time');
 
+        $doctors_schedule = DoctorSchedule::where('schedule_date',$request->date)->where('doctor_id',$request->doctor_id)->first();
+
         $schedule_am = $schedule->where('time','AM')->count();
         $schedule_pm = $schedule->where('time','PM')->count();
         $data = [];
 
         array_push($data, (object)[
-                'am' => $am_limit-$schedule_am,
+                'schedule' => $schedule,
                 'pm' => $pm_limit-$schedule_pm
         ]);
-        return $schedule;   
+        return array(
+            'schedules' => $schedule,
+            'doctors_schedule' => $doctors_schedule,
+        
+        );   
     }
 
     public function create(){

@@ -111,7 +111,7 @@ class PatientController extends Controller
     public function view(Request $request){
         $patientDetail = PatientDetail::find($request->id);
         $patientAccount = User::find($patientDetail->user_id);
-        $medicalHistory = MedicalHistory::where('patient_id','=',$patientDetail->user_id)->with('doctor')->get();
+        $medicalHistory = MedicalHistory::where('patient_id','=',$patientDetail->user_id)->with('doctor')->orderBy('id','desc')->get();
         $labResults = LabResult::where('patient_id','=', $patientDetail->user_id)->with('patient','patient.patientDetails','procedure')->get();
         $resultLab = [];
         foreach($labResults as $lab){
@@ -167,7 +167,7 @@ class PatientController extends Controller
         $patientDetail = PatientDetail::find($request->id);
         $patientAccount = User::find($patientDetail->user_id);
         $doctors = User::where('type','=',2)->get();
-        
+        $medicalHistory = MedicalHistory::where('patient_id','=',$patientDetail->user_id)->with('doctor')->orderBy('id','desc')->first();
         $user = User::where('id', Auth::user()->id)->with('usertype','usertype.permissions')->get();
         $permissions = [];
         foreach($user[0]->usertype->permissions as $permission)
@@ -179,6 +179,7 @@ class PatientController extends Controller
             'patientDetail' => $patientDetail,
             'doctors'       => $doctors,
             'patientAccount' => $patientAccount,
+            'medicalHistory' => $medicalHistory,
         );
 
         return view('patient-management.create_medical_history')->with('data',$data);

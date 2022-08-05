@@ -65,6 +65,9 @@
                                 <option value="" selected disabled>-- Select Time --</option>
                             </select>
                         </div>
+                        <div class="col-md-2" >
+                            <i><span class='text-danger' id='no_available_slots'></span></i>
+                        </div>
                         {{-- <div class="form-group col-md-6">
                             <label  class="  col-form-label text-info">AM : <span id='available_am'>0</span> :  PM : <span id='available_pm'>0</span> </label>
                         </div> --}}
@@ -123,6 +126,7 @@
                 }     ,
                 dataType: "json",   
                 success: function(data){    
+                    document.getElementById("no_available_slots").innerHTML = "";
                     document.getElementById("myDiv").style.display="none";
                     console.log(data);
                     // document.getElementById("available_am").innerHTML = data[0].am;
@@ -138,20 +142,36 @@
                     // {
                     // $("#time").append("<option class='time-data' value='PM'>PM</option>");
                     // }
-                    for(i = 0;i < times.length;i++)
+                    var schedule = data.schedules;
+                    if(data.doctors_schedule != null)
                     {
-                     
-                        if(data.includes(times[i]) == true)
+                        var indexIn = times.findIndex((time) => time == data.doctors_schedule.date_from);
+                        var indexOut = times.findIndex((time) => time == data.doctors_schedule.date_to);
+
+                        for(i = indexIn;i < indexOut+1;i++)
                         {
-                            $("#real_time").append("<option class='time-data bg-danger text-white' value='"+times[i]+"' disabled>"+times[i]+"</option>");
-                        }
-                        else
-                        {
-                            $("#real_time").append("<option class='time-data ' value='"+times[i]+"' >"+times[i]+"</option>");
-                        }
                         
-                    }
+                            if(schedule.includes(times[i]) == true)
+                            {
+                                $("#real_time").append("<option class='time-data bg-danger text-white' value='"+times[i]+"' disabled>"+times[i]+"</option>");
+                            }
+                            else
+                            {
+                                $("#real_time").append("<option class='time-data ' value='"+times[i]+"' >"+times[i]+"</option>");
+                            }
+                            
+                        }
                    
+                    }
+                    else
+                    {
+                        document.getElementById("no_available_slots").innerHTML = "No Available Slots";
+                    }
+
+                       
+                   
+                 
+                 
                 },
                 error: function(e)
                 {
@@ -172,8 +192,7 @@
         var tt = 540; // start time
         var ap = ['AM', 'PM']; // AM-PM
 
-        //loop to increment the time and push results in array
-        for (var i=0;tt<14*60; i++) {
+        for (var i=0;tt<16.25*60; i++) {
         var hh = Math.floor(tt/60); // getting hours of day in 0-24 format
         var mm = (tt%60); // getting minutes of the hour in 0-55 format
         if(hh == 12)

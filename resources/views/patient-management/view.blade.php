@@ -58,7 +58,11 @@
                     <div class="col-lg-12 col-md-12">
                         <h4 style="color:#3D6B07!important">General Medical History</h4>
                         @if(Auth::user()->type == 2 || Auth::user()->type == 8)
+                            @if(!empty($data['medicalHistory']))
+                            <a href="{{ route('create-medical-history',$data['patientDetail']['id']) }}"><button class="btn btn-info pull-right">Update</button></a>
+                            @else
                             <a href="{{ route('create-medical-history',$data['patientDetail']['id']) }}"><button class="btn btn-info pull-right"><i class="fa fa-plus"></i> Create New</button></a>
+                            @endif
                         @endif
                         <hr style="border: 1px solid #3D6B07;">
                     </div>
@@ -72,10 +76,10 @@
                                 <strong>Date of last visit :</strong> {{ $history['last_visit'] }} <br>
                                 <strong>Next Visit :</strong> {{ $history['next_visit'] }} <br>
                                 <strong>Attending Doctor :</strong> {{ $history->doctor->name }} <br>
-
                             </p>
                             <hr>
                         </div>
+                        @break
                     @endforeach
                     @else
                     <div class="col-lg-12">

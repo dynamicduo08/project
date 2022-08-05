@@ -62,6 +62,7 @@
                     <nav class="sb-sidenav-menu-nested nav">
                         @if(Auth::user()->type == 2)
                             <a class="nav-link" href="{{ route('doctors-list') }}">Profile</a>
+                            <a class="nav-link" href="{{ route('doctors-schedule') }}">Schedule</a>
                         @else
                             <a class="nav-link" href="{{ url('/doctors-list') }}">Doctors List</a>
                             <!-- <a class="nav-link" href="{{ url('/appointments/check-availability') }}">Check Availability</a> -->

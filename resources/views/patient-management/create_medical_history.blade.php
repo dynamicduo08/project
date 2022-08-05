@@ -5,7 +5,7 @@
     <div class="container-fluid" id="app">
         <h1 class="mt-4"><img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/patient.png') }}" alt="Patient Management">Patient Management</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Create Medical History</li>
+            <li class="breadcrumb-item active">@if($data['medicalHistory'] != null) Update Medical History @else Create Medical History @endif </li>
         </ol>
 
         <form method="POST" action="{{ route('save-medical-history') }}" aria-label="{{ __('Create Medical History') }}">
@@ -17,8 +17,7 @@
 
                 <div class="col-md-6">
                     <small>*Note: Provide a detailed explanation of patient complains and symptoms</small>
-                    <textarea name="complains" class="form-control" id="" cols="15" rows="5" required></textarea>
-                    
+                    <textarea name="complains" class="form-control" id="" cols="15" rows="5" required>@if($data['medicalHistory'] != null){{$data['medicalHistory']->complains}}@endif</textarea>
                     @if ($errors->has('complains'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('complains') }}</strong>
@@ -32,7 +31,7 @@
 
                 <div class="col-md-6">
                     <small>*Note: Provide a detailed diagnosis and findings</small>
-                    <textarea name="diagnosis" class="form-control" id="" cols="15" rows="5" required></textarea>
+                    <textarea name="diagnosis" class="form-control" id="" cols="15" rows="5" required>@if($data['medicalHistory'] != null){{$data['medicalHistory']->diagnosis}}@endif</textarea>
                     
                     @if ($errors->has('diagnosis'))
                         <span class="invalid-feedback" role="alert">
@@ -47,7 +46,7 @@
 
                 <div class="col-md-6">
                     <small>*Note: Provide a detailed treatment procedures, schedule of medication etc.</small>
-                    <textarea name="treatment" class="form-control" id="" cols="15" rows="5" required></textarea>
+                    <textarea name="treatment" class="form-control" id="" cols="15" rows="5" required>@if($data['medicalHistory'] != null){{$data['medicalHistory']->treatment}}@endif</textarea>
                     
                     @if ($errors->has('treatment'))
                         <span class="invalid-feedback" role="alert">
@@ -62,7 +61,7 @@
                 <label for="last_visit" class="col-md-4 col-form-label text-md-right">{{ __('Date of last Visit') }}</label>
 
                 <div class="col-md-6">
-                  <input id="last_visit" name="last_visit" class="form-control{{ $errors->has('last_visit') ? ' is-invalid' : '' }}" type="date" value="{{ date('Y-m-d',strtotime($data['patientDetail']['date_of_birth'])) }}" required>
+                  <input id="last_visit" name="last_visit" class="form-control{{ $errors->has('last_visit') ? ' is-invalid' : '' }}" type="date" max='{{ date('Y-m-d')}}' value='{{ date('Y-m-d')}}' required>
                 </div>
 
                 @if ($errors->has('last_visit'))
@@ -97,7 +96,7 @@
                     <select name="attending_doctor" class="form-control" id="">
                         <option value="" selected disabled>-- Select Doctor --</option>
                         @foreach ($data['doctors'] as $doctor)
-                            <option value="{{ $doctor['id'] }}">{{ $doctor['name'] }}</option>
+                            <option value="{{ $doctor['id'] }}" @if($data['medicalHistory'] != null) @if($doctor['id'] == $data['medicalHistory']->attending_doctor) selected @endif @endif>{{ $doctor['name'] }}</option>
                         @endforeach
                     </select>
                     

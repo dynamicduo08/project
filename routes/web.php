@@ -90,7 +90,12 @@ Route::middleware('auth')->group(function () {
 
     //doctors
     Route::get('/getDoctorsList', "DoctorController@getDoctors")->name('get-doctor-list');
+    Route::get('/create-schedule', "DoctorController@create_schedule")->name('create-schedule');
+    Route::post('/save-schedule', "DoctorController@save_schedule")->name('save-schedule');
+    Route::get('check_schedule_doctor',"DoctorController@check_schedule_doctor_data");
     Route::get('/doctors-list', "DoctorController@index")->name('doctors-list');
+    Route::get('/doctors-schedule', "DoctorController@doctors_schedule")->name('doctors-schedule');
+    Route::get('/delete-schedule/{id}', "DoctorController@delete_schedule")->name('delete-schedule');
     Route::get('/doctors-list/edit/{id}',"DoctorController@edit")->name('edit-doctor');
     Route::post('/doctors-list/update',"DoctorController@update")->name('update-doctor');
     Route::get('/doctors-list/delete/{id}',"DoctorController@delete")->name('delete-doctor');
