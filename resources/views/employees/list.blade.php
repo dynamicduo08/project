@@ -23,6 +23,7 @@
                                 <th>Employee Name</th>
                                 <th>Position</th>
                                 <th>Daily Rate</th>
+                                <th>Leave Credit</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,15 +36,35 @@
                                         @if($employee->daily_rate == '')
                                             <button class="btn btn-info" title="Set daily rate first!" disabled="disabled"><i class="fa fa-calendar" ></i> Timesheet</button>
                                         @else
-                                            <a href="{{ route('employee-timesheet', $employee['id'] ) }}"><button class="btn btn-info" title="Edit daily rate"><i class="fa fa-calendar"></i> Timesheet</button></a>
+                                            <a href="{{ route('employee-timesheet', $employee['id'] ) }}"><button  onclick='show()' class="btn btn-info" title="Edit daily rate"><i class="fa fa-calendar"></i> Timesheet</button></a>
+                                        @endif
+                                        @if(count(($employee->daily_rates)->where('status','')) == 0)
+                                        <a href="{{ route('edit-daily-rate', $employee['id'] ) }}"><button onclick='show()' class="btn btn-info" title="Edit"><i class="fa fa-coins"></i> Update Daily Rate</button></a>
+                                        @endif
+
+                                        @if(count($employee->attendance))
+                                        <a href="{{ route('reset-time-out',$employee->id) }}" ><button onclick='show()' type="button" class="btn btn-sm btn-danger" title='Decline'> Reset Time Out </button></a>
                                         @endif
                                         
-                                        <a href="{{ route('edit-daily-rate', $employee['id'] ) }}"><button class="btn btn-info" title="Edit"><i class="fa fa-coins"></i> Daily Rate</button></a>
                                     </td>
                                     <td>{{ 'EP' . str_pad($employee->id, 6, '0', STR_PAD_LEFT) }}</td>
-                                    <td>{{ $employee->user->name }}</td>
+                                    <td>{{ $employee->user->name }}{{ count($employee->attendance) }}</td>
                                     <td>{{ $employee->user->usertype->name }}</td>
-                                    <td>{{ ($employee->daily_rate == '') ? 0 : $employee->daily_rate }} PHP</td>
+                                    <td>{{ ($employee->daily_rate == '') ? 0 : $employee->daily_rate }} PHP 
+                                        @if(count(($employee->daily_rates)->where('status','')))
+                                        <hr>
+                                        @if(auth()->user()->type == 5)
+                                        {{ number_format((($employee->daily_rates)->where('status','')->first()->daily_rate),2) }} <span class="label label-warning">Pending</span> <a href="{{ route('cancel-daily-rate',(($employee->daily_rates)->where('status','')->first()->id)) }}" ><button onclick='show()' type="button" class="btn btn-sm btn-danger" title='Cancel'><i class="fa fa-ban" ></i></button></a>
+                                        @else
+                                        
+                                        <small>Request By:{{ ($employee->daily_rates)->where('status','')->first()->user_info->name }} </small><Br>
+                                        Amount : {{ number_format((($employee->daily_rates)->where('status','')->first()->daily_rate),2) }} 
+                                        <a href="{{ route('approve-daily-rate',(($employee->daily_rates)->where('status','')->first()->id)) }}" > <button onclick='show()' type="button" class="btn btn-sm btn-success" title='Approve'><i class="fa fa-check" ></i></button> </a>
+                                        <a href="{{ route('reject-daily-rate',(($employee->daily_rates)->where('status','')->first()->id)) }}" ><button onclick='show()' type="button" class="btn btn-sm btn-danger" title='Decline'><i class="fa fa-ban" ></i></button></a>
+                                        @endif
+                                        @endif
+                                    </td>
+                                    <td>{{ $employee->leave_credit }}</td>
                                 </tr>
                             @endforeach
                         @else

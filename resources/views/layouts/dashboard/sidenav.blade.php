@@ -109,6 +109,8 @@
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="{{ route('get-employees-list') }}">Employees</a>
                         <a class="nav-link" href="{{ route('payroll-list') }}">Payroll</a>
+                        <a class="nav-link" href="{{ route('holidays') }}">Holidays</a>
+                        <a class="nav-link" href="{{ route('deductions') }}">Deductions</a>
                     </nav>
                 </div>
             @endif

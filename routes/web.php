@@ -125,7 +125,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/employees/edit-daily-rate/{id}','EmployeeController@editDailyRate')->name('edit-daily-rate');
     Route::post('/employees/edit-daily-rate/save','EmployeeController@saveDailyRate')->name('save-daily-rate');
     Route::get('/employees/time-in','EmployeeController@timeIn')->name('time-in');
+    Route::get('/employees/break-in','EmployeeController@breakIn')->name('break-in');
+    Route::get('/employees/break-out','EmployeeController@breakOut')->name('break-out');
+    Route::get('/employees/lunch-in','EmployeeController@lunchIn')->name('lunch-in');
+    Route::get('/employees/lunch-out','EmployeeController@lunchOut')->name('lunch-out');
     Route::get('/employees/time-out','EmployeeController@timeOut')->name('time-out');
+    Route::get('cancel-daily-rate/{id}','EmployeeController@cancelRate')->name('cancel-daily-rate');
+    Route::get('approve-daily-rate/{id}','EmployeeController@ApproveRate')->name('approve-daily-rate');
+    Route::get('reject-daily-rate/{id}','EmployeeController@rejectRate')->name('reject-daily-rate');
+    Route::get('reset-time-out/{id}','EmployeeController@resetTimeOut')->name('reset-time-out');
+
+    //Holidays
+    Route::get('/holiday','HolidayController@holiday')->name('holidays');
+    Route::post('/new-holiday','HolidayController@new_holiday');
+    Route::get('delete-holiday/{id}','HolidayController@delete_holiday');
+
+    //deductions
+    Route::get('/deductions','DeductionController@deductions')->name('deductions');
+    Route::post('/edit-deduction/{id}','DeductionController@edit_deductions');
+
 
     // category
     Route::get('/category/list','CategoryController@list')->name('get-category-list');

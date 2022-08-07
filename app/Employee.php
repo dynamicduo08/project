@@ -17,4 +17,8 @@ class Employee extends Model
     public function attendance(){
         return $this->hasMany('App\Attendance','employee_id');
     }
+    public function daily_rates()
+    {
+        return $this->hasMany('App\DailyRate','employee_id');
+    }
 }

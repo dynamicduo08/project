@@ -72,11 +72,17 @@ class HomeController extends Controller
                 
             }else{
                 // dd("renz");
+                $attendance = [];
                 $user = User::where('id', Auth::user()->id)->with('usertype','usertype.permissions')->get();
+                if(Auth::user()->type != 1 && Auth::user()->type != 3)
+                {
                 $employee = Employee::where('user_id', Auth::user()->id)->first();
+              
+                
                 $attendance = Attendance::where('employee_id', $employee->id)
                 ->where('date',date('Y-m-d'))
                 ->get();
+                }
                 $permissions = [];
                 foreach($user[0]->usertype->permissions as $permission)
                 {
@@ -86,7 +92,7 @@ class HomeController extends Controller
                 $data = array(
                     'permissions' => $permissions,
                     'user'        => $user,
-                    'attendance'        => $attendance,
+                    // 'attendance'        => $attendance,
 
                 );
 

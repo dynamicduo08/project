@@ -9,15 +9,19 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Megason Diagnostic Clinic</title>
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        
         <style>
-            input[type="date"]::-webkit-calendar-picker-indicator {
+            .date_input input[type="date"]::-webkit-calendar-picker-indicator {
                 background: transparent;
                 bottom: 0;
                 color: transparent;
-                cursor: pointer;
+                /* cursor: pointer; */
                 height: auto;
                 left: 0;
                 position: absolute;

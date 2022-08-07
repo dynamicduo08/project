@@ -66,7 +66,7 @@
                         <label for="arrival_date" class="col-md-4 col-form-label text-md-right">{{ __('Arrival Date') }}</label>
 
                         <div class="col-md-6">
-                          <input id="arrival_date" name="arrival_date" class="form-control{{ $errors->has('arrival_date') ? ' is-invalid' : '' }}" type="date" value="{{ old('arrival_date') }}">
+                          <input id="arrival_date" name="arrival_date" class="date_input form-control{{ $errors->has('arrival_date') ? ' is-invalid' : '' }}" type="date" value="{{ old('arrival_date') }}">
                         </div>
 
                         @if ($errors->has('arrival_date'))
@@ -81,7 +81,7 @@
                         <label for="expiration_date" class="col-md-4 col-form-label text-md-right">{{ __('Expiration Date') }}</label>
 
                         <div class="col-md-6">
-                          <input id="expiration_date" name="expiration_date" class="form-control{{ $errors->has('expiration_date') ? ' is-invalid' : '' }}" type="date" value="{{ old('expiration_date') }}">
+                          <input id="expiration_date" name="expiration_date" class="date_input form-control{{ $errors->has('expiration_date') ? ' is-invalid' : '' }}" type="date" value="{{ old('expiration_date') }}">
                         </div>
 
                         @if ($errors->has('expiration_date'))

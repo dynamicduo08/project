@@ -46,7 +46,7 @@
                 <label for="dob" class="col-md-4 col-form-label text-md-right">{{ __('Date of Birth') }}</label>
 
                 <div class="col-md-6">
-                  <input id="dob" name="dob" class="form-control{{ $errors->has('dob') ? ' is-invalid' : '' }}" type="date" value="{{ date('Y-m-d',strtotime($data['patientDetail']['date_of_birth'])) }}">
+                  <input id="dob" name="dob" class="date_input form-control{{ $errors->has('dob') ? ' is-invalid' : '' }}" type="date" value="{{ date('Y-m-d',strtotime($data['patientDetail']['date_of_birth'])) }}">
                 </div>
 
                 @if ($errors->has('dob'))

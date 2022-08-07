@@ -162,7 +162,7 @@
                                             $date = $date_year.date('-m-d');
                                         @endphp
                                         <div class="col-md-6">
-                                          <input id="dob" name="dob" class="form-control{{ $errors->has('dob') ? ' is-invalid' : '' }}" onchange='onchangeBirthDate(value);' max='{{date('Y-m-d')}}' type="date" min={{$date}} value="{{ old('dob') }}">
+                                          <input id="dob" name="dob" class="date_input form-control{{ $errors->has('dob') ? ' is-invalid' : '' }}" onchange='onchangeBirthDate(value);' max='{{date('Y-m-d')}}' type="date" min={{$date}} value="{{ old('dob') }}">
                                         </div>
             
                                         @if ($errors->has('dob'))

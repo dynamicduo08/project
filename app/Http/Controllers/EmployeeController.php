@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Employee;
+use App\DailyRate;
 use App\User;
 use App\Attendance;
 use App\Payroll;
@@ -24,7 +25,13 @@ class EmployeeController extends Controller
             array_push($permissions, $permission->name);
         }
 
-        $employees = Employee::with('user','user.usertype')->where('status',null)->get();
+        $employees = Employee::with('user','user.usertype','daily_rates.user_info')->where('status',null)
+        ->with(['attendance' => function ($query)
+        {
+            $query->where('date',date('Y-m-d'))
+            ->where('type','OUT')->first();
+        }])
+        ->get();
 
         $data = array(
             'permissions' => $permissions,
@@ -237,17 +244,37 @@ class EmployeeController extends Controller
     }
 
     public function saveDailyRate(Request $request){
-        $employee = Employee::where('id',$request->employee_id)->get();
-        $employee[0]->daily_rate = $request->daily_rate;
-        $employee[0]->save();
+        // dd($request->all());
+        if(auth()->user()->type == 1)
+        {
+            $employee = Employee::where('id',$request->employee_id)->get();
+            $employee[0]->daily_rate = $request->daily_rate;
+            $employee[0]->save();
 
-        ActivityLog::create([
-            'user_id' => Auth::user()->id,
-            'activity' => 'Updated a daily rate of an employee'
-        ]);
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Updated a daily rate of an employee'
+            ]);
+    
+            Alert::success('', 'Daily Rate Updated!');
+            return redirect()->route('get-employees-list');
+        }
+        else
+        {
+            $dailyrate = new DailyRate;
+            $dailyrate->employee_id = $request->employee_id;
+            $dailyrate->daily_rate = $request->daily_rate;
+            $dailyrate->created_by = auth()->user()->id;
+            $dailyrate->save();
 
-        Alert::success('', 'Daily Rate Updated!');
-        return redirect()->route('get-employees-list');
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Submit daily rate for approval'
+            ]);
+    
+            Alert::success('', 'Daily Rate submitted!');
+            return redirect()->route('get-employees-list');
+        }
     }
 
     public function timeIn(){
@@ -281,6 +308,110 @@ class EmployeeController extends Controller
             ]);
 
             Alert::success('', 'Time in recorded at ' . date('h:i a',strtotime($time_now)) . '!');
+            return redirect()->back();
+        }
+    }
+    public function breakOut(Request $request){
+        // dd($type);
+        $user = User::where('id',Auth::user()->id)->with('employeeDetails')->get();
+        $employee = Employee::where('user_id', Auth::user()->id)->get();
+
+        $time_now = date('H:i');
+        // check if time in exists for the 
+            $attendance = new Attendance;
+            $attendance->employee_id = $employee[0]->id;
+            $attendance->date = date('Y-m-d');
+            $attendance->time = $time_now;
+            $attendance->type = "BREAK OUT";
+            $attendance->reason = $request->reason;
+            $attendance->save();
+            
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Submitted an attendance break-out'
+            ]);
+
+            Alert::success('', 'BREAK OUT recorded at ' . date('h:i a',strtotime($time_now)) . '!');
+            return redirect()->back();
+        
+    }
+    public function lunchOut(Request $request){
+        $user = User::where('id',Auth::user()->id)->with('employeeDetails')->get();
+        $employee = Employee::where('user_id', Auth::user()->id)->get();
+
+        $time_now = date('H:i');
+        // check if time in exists for the 
+            $attendance = new Attendance;
+            $attendance->employee_id = $employee[0]->id;
+            $attendance->date = date('Y-m-d');
+            $attendance->time = $time_now;
+            $attendance->type = "LUNCH OUT";
+            $attendance->reason = $request->reason;
+            $attendance->save();
+            
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Submitted an attendance lunch-out'
+            ]);
+
+            Alert::success('', 'LUNCH OUT recorded at ' . date('h:i a',strtotime($time_now)) . '!');
+            return redirect()->back();
+        
+    }
+    public function lunchIn(Request $request){
+        $user = User::where('id',Auth::user()->id)->with('employeeDetails')->get();
+        $employee = Employee::where('user_id', Auth::user()->id)->get();
+
+        $time_now = date('H:i');
+        // check if time in exists for the 
+            $attendance = new Attendance;
+            $attendance->employee_id = $employee[0]->id;
+            $attendance->date = date('Y-m-d');
+            $attendance->time = $time_now;
+            $attendance->type = "LUNCH IN";
+            $attendance->reason = $request->reason;
+            $attendance->save();
+            
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Submitted an attendance lunch-in'
+            ]);
+
+            Alert::success('', 'LUNCH IN recorded at ' . date('h:i a',strtotime($time_now)) . '!');
+            return redirect()->back();
+        
+    }
+    public function breakIn(){
+        $user = User::where('id',Auth::user()->id)->with('employeeDetails')->get();
+        $employee = Employee::where('user_id', Auth::user()->id)->get();
+
+        $date_now = Carbon::now()->format('Y-m-d');
+        $time_now = date('H:i');
+        // check if time in exists for the day
+        $attendance = Attendance::where('employee_id', $employee[0]->id)
+                                ->where('date',$date_now)
+                                ->where('type', 'BREAK IN')
+                                ->get()
+                                ->count();
+        
+        if($attendance > 0){
+            // may time in na
+            Alert::error('', 'You already have Break out for today!');
+            return redirect()->back();
+        }else{
+            Attendance::create([
+                'employee_id' => $employee[0]->id,
+                'date'        => $date_now,
+                'time'        => $time_now,
+                'type'        => "BREAK IN"
+            ]);
+
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Submitted an attendance break-in'
+            ]);
+
+            Alert::success('', 'BREAK IN recorded at ' . date('h:i a',strtotime($time_now)) . '!');
             return redirect()->back();
         }
     }
@@ -332,5 +463,64 @@ class EmployeeController extends Controller
             }
         }
         
+    }
+    public function cancelRate (Request $request,$id)
+    {
+        $dailyrate = DailyRate::find($id);
+        $dailyrate->status = "Cancelled";
+        $dailyrate->save();
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Cancelled Daily Rate'
+        ]);
+
+        Alert::success('', 'Daily Rate cancelled!');
+        return redirect()->route('get-employees-list');
+    }
+    public function rejectRate (Request $request,$id)
+    {
+        $dailyrate = DailyRate::find($id);
+        $dailyrate->status = "Reject";
+        $dailyrate->save();
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Reject Daily Rate'
+        ]);
+
+        Alert::success('', 'Daily Rate rejected!');
+        return redirect()->route('get-employees-list');
+    }
+    public function ApproveRate (Request $request,$id)
+    {
+        $dailyrate = DailyRate::find($id);
+        $dailyrate->status = "Approved";
+        $dailyrate->save();
+
+        $employee = Employee::where('id',$dailyrate->employee_id)->first();
+        $employee->daily_rate = $dailyrate->daily_rate;
+        $employee->save();
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Approved Daily Rate'
+        ]);
+
+        Alert::success('', 'Daily Rate approved!');
+        return redirect()->route('get-employees-list');
+    }
+
+    public function resetTimeOut (Request $request, $id)
+    {
+        $attendance = Attendance::where('employee_id',$id)->where('type','OUT')->where('date',date('Y-m-d'))->first();
+        $attendance->delete();
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Reset Timeout'
+        ]);
+
+        Alert::success('', 'Successfully Reset');
+        return redirect()->route('get-employees-list');
     }
 }

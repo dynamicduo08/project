@@ -53,7 +53,7 @@
                         <label for="date" class="col-md-4 col-form-label text-md-right">{{ __('Select Date') }}</label>
         
                         <div class="col-md-6">
-                          <input id="date" onchange='no_weekends(this.value);getminutes();' min='{{date('Y-m-d', strtotime("+1 day", strtotime(date('Y-m-d'))))}}' onkeydown="return false;"  name="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" type="date" >
+                          <input id="date" onchange='no_weekends(this.value);getminutes();' min='{{date('Y-m-d', strtotime("+1 day", strtotime(date('Y-m-d'))))}}' onkeydown="return false;"  name="date" class="date_input form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" type="date" >
                         </div>
                         <br>
                     </div>

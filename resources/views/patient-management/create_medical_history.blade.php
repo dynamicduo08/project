@@ -61,7 +61,7 @@
                 <label for="last_visit" class="col-md-4 col-form-label text-md-right">{{ __('Date of last Visit') }}</label>
 
                 <div class="col-md-6">
-                  <input id="last_visit" name="last_visit" class="form-control{{ $errors->has('last_visit') ? ' is-invalid' : '' }}" type="date" max='{{ date('Y-m-d')}}' value='{{ date('Y-m-d')}}' required>
+                  <input id="last_visit" name="last_visit" class="date_input form-control{{ $errors->has('last_visit') ? ' is-invalid' : '' }}" type="date" max='{{ date('Y-m-d')}}' value='{{ date('Y-m-d')}}' required>
                 </div>
 
                 @if ($errors->has('last_visit'))
@@ -76,7 +76,7 @@
                 <label for="next_visit" class="col-md-4 col-form-label text-md-right">{{ __('Date of Next Visit') }}</label>
 
                 <div class="col-md-6">
-                  <input id="next_visit" name="next_visit" class="form-control{{ $errors->has('next_visit') ? ' is-invalid' : '' }}" type="date" min='{{date('Y-m-d', strtotime("+1 day", strtotime(date('Y-m-d'))))}}' required>
+                  <input id="next_visit" name="next_visit" class="date_input form-control{{ $errors->has('next_visit') ? ' is-invalid' : '' }}" type="date" min='{{date('Y-m-d', strtotime("+1 day", strtotime(date('Y-m-d'))))}}' required>
                 </div>
 
                 @if ($errors->has('next_visit'))

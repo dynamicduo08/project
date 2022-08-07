@@ -15,7 +15,7 @@
                 <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                     @if($attendance->where('type','IN')->first() == null)
                     <div class="btn-group mr-2" role="group" aria-label="First group">
-                        <a href="{{ route('time-in') }}" onclick='show();'><button type="button" class="btn btn-secondary"><i class="fas fa-clock"></i> TIME IN</button></a>
+                        <a href="{{ route('time-in') }}" onclick='show();'><button type="button" class="btn btn-secondary btn-sm"><i class="fas fa-clock"></i> TIME IN</button></a>
                     </div>
                     @else
                     <div class="btn-group mr-2" role="group" aria-label="First group">
@@ -23,17 +23,70 @@
                     </div>
                     {{-- {{dd($attendance->where('type','OUT'))}} --}}
                     @if($attendance->where('type','OUT')->first() == null)
-                    <div class="btn-group mr-2" role="group" aria-label="Second group">
-                        <a href="{{ route('time-out') }}" onclick='show();'><button type="button" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> TIME OUT</button></a>
-                    </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <a href="{{ route('time-out') }}" onclick='show();'><button type="button" class="btn btn-secondary btn-sm"><i class="fas fa-sign-out-alt"></i> TIME OUT</button></a>
+                        </div>
                     @else
-                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                    <div class="btn-group mr-2" role="group" aria-label="Second group">
                         <i >Time Out &nbsp;:&nbsp; </i> <b class='text-success'> {{date('h:i a',strtotime($attendance->where('type','OUT')->first()->time))}} </b>
                     </div>
                     @endif
                     @endif
                 </div>
+                <br>
+                @if($attendance->where('type','IN')->first() != null)
+                <h4>Breaktime </h4>
+                <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                    LUNCH BREAK |
+                    @if($attendance->where('type','LUNCH OUT')->first() == null)
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        <a href="{{ route('lunch-out') }}" onclick='show();'><button type="button" class="btn btn-secondary btn-sm"><i class="fa fa-sign-out-alt"></i> LUNCH OUT</button></a>
+                    </div>
+                    @else
+                   
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                       <b class='text-success'> {{date('h:i a',strtotime($attendance->where('type','LUNCH OUT')->first()->time))}} </b>-
+                    </div>
+
+                    @if($attendance->where('type','LUNCH IN')->first() == null)
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <a href="{{ route('lunch-in') }}" onclick='show();'><button type="button" class="btn btn-secondary btn-sm"><i class="fas fa-clock"></i> LUNCH IN</button></a>
+                        </div>  
+                    @else
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <b class='text-success'> {{date('h:i a',strtotime($attendance->where('type','LUNCH IN')->first()->time))}} </b> | {{(strtotime($attendance->where('type','LUNCH IN')->first()->time) - strtotime($attendance->where('type','LUNCH OUT')->first()->time))/60}} Minutes
+                        </div>
+                    @endif
+                   
+                    @endif
+                </div>
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    SNACKS BREAK | 
+                    @if($attendance->where('type','BREAK OUT')->first() == null)
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        <a href="{{ route('break-out') }}" onclick='show();'><button type="button" class="btn btn-secondary btn-sm"><i class="fa fa-sign-out-alt"></i> SNACKS OUT</button></a>
+                    </div>
+                    @else
+                   
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        <b class='text-success'> {{date('h:i a',strtotime($attendance->where('type','BREAK OUT')->first()->time))}} </b> -
+                    </div>
+
+                    @if($attendance->where('type','BREAK IN')->first() == null)
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <a href="{{ route('break-in') }}" onclick='show();'><button type="button" class="btn btn-secondary btn-sm"><i class="fas fa-clock"></i> SNACKS IN</button></a>
+                        </div>  
+                    @else
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                           <b class='text-success'> {{date('h:i a',strtotime($attendance->where('type','BREAK IN')->first()->time))}} </b> | {{(strtotime($attendance->where('type','BREAK IN')->first()->time) - strtotime($attendance->where('type','BREAK OUT')->first()->time))/60}} Minutes
+                        </div>
+                    @endif
+                   
+                    @endif
+                </div>
                 @endif
+                @endif
+                @include('employees.break_out')
                 <hr>
                 <h5>Quick Links</h5>
                 <div class="row">
@@ -146,7 +199,6 @@
                             </div>
                         </div>
                     @endif
-
                     @if(in_array("inventory",$data['permissions']))
                         <div class="col-xl-3 col-md-6">
                             <div class="card mb-4">
