@@ -58,24 +58,24 @@
                                 <h4>Deductions:</h4><br>
                                 <div class="row">
                                     
-                                <div class="form-group col-lg-4 col-sm-4 col-md-4">
+                                    <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="sss" class="control-label">SSS</label>
-                                        <input step="any" placeholder="%" type="number" name="sss" id="sss" class="form-control" required>
+                                        <input step="any" placeholder="%" type="number" value='{{$deductions->where('deduction','SSS')->first()->amount}}' name="sss" id="sss" class="form-control" readonly required>
                                     </div>
 
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="philhealth" class="control-label">Philhealth</label>
-                                        <input step="any" placeholder="%" type="number" name="philhealth" id="philhealth" class="form-control" required>
+                                        <input step="any" placeholder="%" type="number" name="philhealth"  value='{{$deductions->where('deduction','PHIL')->first()->amount}}' id="philhealth" class="form-control" readonly required>
                                     </div>
 
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="pagibig" class="control-label">Pag Ibig</label>
-                                        <input type="number" placeholder="Amount" name="pagibig" id="pagibig" class="form-control" required>
+                                        <input type="number" placeholder="Amount" name="pagibig" id="pagibig" value='{{$deductions->where('deduction','PAGIBIG')->first()->amount}}' class="form-control" readonly required>
                                     </div>
                                     
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="tax" class="control-label">Tax</label>
-                                        <input step="any" placeholder="%" type="number" name="tax" id="tax" class="form-control">
+                                        <input step="any" placeholder="%" type="number" readonly name="tax" id="tax" class="form-control">
                                     </div>
 
 

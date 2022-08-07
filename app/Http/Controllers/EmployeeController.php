@@ -13,6 +13,7 @@ use App\User;
 use App\Attendance;
 use App\Payroll;
 use Carbon\Carbon;
+use App\Deduction;
 use App\ActivityLog;
 
 class EmployeeController extends Controller
@@ -43,6 +44,7 @@ class EmployeeController extends Controller
     }
 
     public function timesheet(Request $request){
+        $deductions = Deduction::get();
         $user = User::where('id', Auth::user()->id)->with('usertype','usertype.permissions')->get();
         $permissions = [];
         foreach($user[0]->usertype->permissions as $permission)
@@ -135,7 +137,11 @@ class EmployeeController extends Controller
         );
 
         // dd($data);
-        return view('employees.timesheet')->with('data',$data);
+        return view('employees.timesheet',array(
+            'data' => $data,
+            'deductions' => $deductions,
+        
+        ));
     }
 
     public function savePayroll(Request $request){

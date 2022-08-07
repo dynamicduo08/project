@@ -11,7 +11,8 @@
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table mr-1"></i>
-                Deductions List
+                Deductions List - per cut off
+                
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -20,7 +21,7 @@
                             <tr>
                                 <th>Action</th>
                                 <th>Deduction</th>
-                                <th>Percent/Amount</th>
+                                <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
