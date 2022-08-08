@@ -15,6 +15,7 @@ use App\Payroll;
 use Carbon\Carbon;
 use App\Deduction;
 use App\ActivityLog;
+use App\Holiday;
 
 class EmployeeController extends Controller
 {
@@ -45,6 +46,7 @@ class EmployeeController extends Controller
 
     public function timesheet(Request $request){
         $deductions = Deduction::get();
+        
         $user = User::where('id', Auth::user()->id)->with('usertype','usertype.permissions')->get();
         $permissions = [];
         foreach($user[0]->usertype->permissions as $permission)
@@ -124,8 +126,16 @@ class EmployeeController extends Controller
         $period = ($payPeriod == 1) ? $firstDay->format('M d, Y') . ' - ' . $fifteenthDay->format('M d, Y') : Carbon::now()->firstOfMonth()->addDays(15)->format('M d, Y') . ' - ' . $lastDay->format('M d, Y');
         $check = Payroll::where('pay_period','=',$period)->where('employee_id','=',$employee[0]->id)->count();
         // dd($check);
-     
+        // dd(date('Y-m-d',strtotime($firstDay)));
 
+        $start_month = date('2019-m-d',strtotime($firstDay));
+        $end_month = date('2019-m-d',strtotime($fifteenthDay));
+        $start_date = date('Y-m-d',strtotime($firstDay));
+        $end_date = date('Y-m-d',strtotime($fifteenthDay));
+        // dd($start_month);
+        $holidays = Holiday::where('status','=','Permanent')->whereBetween('holiday_date',[$start_month, $end_month])->get();
+        // dd($holidays);  
+        $holidays_new = Holiday::whereBetween('holiday_date',[$start_date, $end_date])->where('status','=',null)->get();
         $data = array(
             'permissions' => $permissions,
             'employee'    => $employee,
@@ -140,6 +150,8 @@ class EmployeeController extends Controller
         return view('employees.timesheet',array(
             'data' => $data,
             'deductions' => $deductions,
+            'holidays' => $holidays,
+            'holidays_new' => $holidays_new,
         
         ));
     }

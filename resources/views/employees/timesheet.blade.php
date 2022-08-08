@@ -24,25 +24,24 @@
                             <div class="container">
                                 <h4>Earnings:</h4><br>
                                 <div class="row">
-                                    
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="employee_leave" class="control-label">Paid Leave</label>
-                                        <input type="number" placeholder="Days" name="employee_leave" id="employee_leave" class="form-control" required>
+                                        <input type="number" placeholder="Days" name="employee_leave" id="employee_leave" class="form-control" value="0" readonly required>
                                     </div>
 
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="ot" class="control-label">Overtime</label>
-                                        <input step=".01" type="number" placeholder="Hours" name="ot" id="ot" class="form-control" required>
+                                        <input step=".01" type="number" placeholder="Hours" name="ot" id="ot" class="form-control" value="0" readonly required>
                                     </div>
 
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="rholiday" class="control-label">Regular Holiday</label>
-                                        <input type="number" placeholder="Days" name="rholiday" id="rholiday" class="form-control" required>
+                                        <input type="number" placeholder="Days" name="rholiday" id="rholiday" class="form-control" value="{{$holidays->where('holiday_type','Regular Holiday')->count() + $holidays_new->where('holiday_type','Regular Holiday')->count()}}" readonly required>
                                     </div>
 
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="sholiday" class="control-label">Special Holiday</label>
-                                        <input type="number" placeholder="Days" name="sholiday" id="sholiday" class="form-control" required>
+                                        <input type="number" placeholder="Days" name="sholiday" id="sholiday" value="{{$holidays->where('holiday_type','Special Holiday')->count() + $holidays_new->where('holiday_type','Special Holiday')->count()}}" readonly  class="form-control" required>
                                     </div>
                                     
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
@@ -59,12 +58,12 @@
                                 <div class="row">
                                     
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
-                                        <label for="sss" class="control-label">SSS</label>
+                                        <label for="sss" class="control-label">SSS %</label>
                                         <input step="any" placeholder="%" type="number" value='{{$deductions->where('deduction','SSS')->first()->amount}}' name="sss" id="sss" class="form-control" readonly required>
                                     </div>
 
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
-                                        <label for="philhealth" class="control-label">Philhealth</label>
+                                        <label for="philhealth" class="control-label">Philhealth %</label>
                                         <input step="any" placeholder="%" type="number" name="philhealth"  value='{{$deductions->where('deduction','PHIL')->first()->amount}}' id="philhealth" class="form-control" readonly required>
                                     </div>
 
@@ -94,7 +93,8 @@
                         <button class="btn btn-info" disabled><i class="fa fa-save"></i> Submit Timesheet</button>
                     @endif
                     <div class="row">
-                        <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                        <div class='col-md-12'>
+                        <table class="table table-bordered" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -136,6 +136,7 @@
                             @endif
                             </tbody>
                         </table>
+                        </div>
                     </div>
                     
                 </div>
