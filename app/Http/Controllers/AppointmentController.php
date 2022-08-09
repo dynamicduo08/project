@@ -176,7 +176,6 @@ class AppointmentController extends Controller
         
         $schedule = Appointment::where('date','=',$request->date)
                                 ->where('doctor_id',$request->doctor_id)
-                                ->where('user_id',$request->patient_id)
                                 ->where(function ($query){
                                     $query->where('status','=',1)
                                     ->orwhere('status','=',0);

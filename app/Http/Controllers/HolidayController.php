@@ -15,7 +15,8 @@ class HolidayController extends Controller
     {
         $user = User::where('id', Auth::user()->id)->with('usertype','usertype.permissions')->get();
         $permissions = [];
-        $holidays = Holiday::where('status','Permanent')->orderBy('holiday_date','asc')->get();
+        $holidays = Holiday::where('status','Permanent')
+        ->orderBy('holiday_date','asc')->get();
         $holidays_a = Holiday::where('status',null)->whereYear('holiday_date', '=', date('Y'))->get();
         foreach($user[0]->usertype->permissions as $permission)
         {
