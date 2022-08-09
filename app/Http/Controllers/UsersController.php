@@ -337,7 +337,7 @@ class UsersController extends Controller
             'password' => Hash::make($request->password)
         ]);   
         $user_data = User::where('id',auth()->user()->id)->first();
-        Mail::to($user->email)->send(new SuccessfullyResetPassword($user));
+        Mail::to($user_data->email)->send(new SuccessfullyResetPassword($user_data));
         // $user->password = Hash::make($request->password);
 
         ActivityLog::create([
