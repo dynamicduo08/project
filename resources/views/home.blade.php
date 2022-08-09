@@ -14,9 +14,12 @@
                 @if(Auth::user()->type != 1 && Auth::user()->type != 3)
                 <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                     @if($attendance->where('type','IN')->first() == null)
-                    <div class="btn-group mr-2" role="group" aria-label="First group">
-                        <a href="{{ route('time-in') }}" onclick='show();'><button type="button" class="btn btn-secondary btn-sm"><i class="fas fa-clock"></i> TIME IN</button></a>
-                    </div>
+                    {{-- {{dd(date('H'))}} --}}
+                        @if((date('H') < 7) && (date('H')> 15))
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <a href="{{ route('time-in') }}" onclick='show();'><button type="button" class="btn btn-secondary btn-sm"><i class="fas fa-clock"></i> TIME IN</button></a>
+                            </div>
+                        @endif
                     @else
                     <div class="btn-group mr-2" role="group" aria-label="First group">
                         <i >Time In &nbsp;</i>:&nbsp;<b class='text-success'> {{date('h:i a',strtotime($attendance->where('type','IN')->first()->time))}} </b>
