@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\SuccessfullyResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -300,6 +301,7 @@ class UsersController extends Controller
 
     public function changePassword(Request $request){
         $user = User::where('id', Auth::user()->id)->with('usertype','usertype.permissions')->get();
+      
         $permissions = [];
         foreach($user[0]->usertype->permissions as $permission)
         {
@@ -333,7 +335,9 @@ class UsersController extends Controller
         
         $user = User::where('id', $user_id)->update([
             'password' => Hash::make($request->password)
-        ]);        
+        ]);   
+        $user_data = User::where('id',auth()->user()->id)->first();
+        Mail::to($user->email)->send(new SuccessfullyResetPassword($user));
         // $user->password = Hash::make($request->password);
 
         ActivityLog::create([
