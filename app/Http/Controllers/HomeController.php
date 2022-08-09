@@ -67,10 +67,10 @@ class HomeController extends Controller
             return view('home')->with('data',$data);
         }else{
             
-            if($account[0]->type == 3){
-                return view('home_otp');
+            // if($account[0]->type == 3){
+            //     return view('home_otp');
                 
-            }else{
+            // }else{
                 // dd("renz");
                 $attendance = [];
                 $user = User::where('id', Auth::user()->id)->with('usertype','usertype.permissions')->get();
@@ -106,7 +106,7 @@ class HomeController extends Controller
                     'attendance'=>$attendance,
 
                 ));
-            }
+            // }
             
         }
     }
