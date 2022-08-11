@@ -74,7 +74,7 @@
                                     
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="tax" class="control-label">Tax</label>
-                                        <input step="any" placeholder="%" type="number" readonly name="tax" id="tax" class="form-control">
+                                        <input step="any" placeholder="%" type="number" readonly name="tax" id="tax" value=0 class="form-control">
                                     </div>
 
 
