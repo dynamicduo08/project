@@ -46,12 +46,12 @@
                                     
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="tmonth" class="control-label">13th Month</label>
-                                        <input type="number" placeholder="Months" name="tmonth" id="tmonth" class="form-control" required>
+                                        <input type="number" placeholder="Months" name="tmonth" value='{{round(($employee[0]->daily_rate/12),2) * $data['total_days_worked']}}' id="tmonth" class="form-control" readonly required>
                                     </div>
 
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="bonus" class="control-label">Bonus</label>
-                                        <input step=".01" placeholder="Amount" type="number" name="bonus" id="bonus" class="form-control" required>
+                                        <input step=".01" placeholder="Amount" type="number" name="bonus" id="bonus" class="form-control" value='0' min='1' required>
                                     </div>
                                 </div>
                                 <h4>Deductions:</h4><br>

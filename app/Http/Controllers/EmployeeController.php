@@ -152,6 +152,7 @@ class EmployeeController extends Controller
             'deductions' => $deductions,
             'holidays' => $holidays,
             'holidays_new' => $holidays_new,
+            'employee' => $employee,
         
         ));
     }
