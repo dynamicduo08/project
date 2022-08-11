@@ -112,8 +112,8 @@
                                 <tr>
                                 @endif
                                     <td>{{ $workday }}</td>
-                                    <td>{{ ($value['IN'] == '') ? '-- NO TIME IN --' : $value['IN']->format('h:m a') }}</td>
-                                    <td>{{ ($value['OUT'] == '') ? '-- NO TIME OUT --' : $value['OUT']->format('h:m a') }}</td>
+                                    <td>{{ ($value['IN'] == '') ? '-- NO TIME IN --' : $value['IN']->format('h:i a') }}</td>
+                                    <td>{{ ($value['OUT'] == '') ? '-- NO TIME OUT --' : $value['OUT']->format('h:i a') }}</td>
                                     <td>{{ $value['hourswork'] }}</td>
                                 </tr>
                                 @endforeach
