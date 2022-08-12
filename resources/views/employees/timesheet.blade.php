@@ -51,7 +51,7 @@
 
                                     <div class="form-group col-lg-4 col-sm-4 col-md-4">
                                         <label for="bonus" class="control-label">Bonus</label>
-                                        <input step=".01" placeholder="Amount" type="number" name="bonus" id="bonus" class="form-control" value='0' min='1' required>
+                                        <input step=".01" placeholder="Amount" type="number" name="bonus" id="bonus" class="form-control" required>
                                     </div>
                                 </div>
                                 <h4>Deductions:</h4><br>
