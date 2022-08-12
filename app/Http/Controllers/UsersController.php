@@ -71,6 +71,7 @@ class UsersController extends Controller
             'contact_number' => $request->contact_number,
             'password' => Hash::make($tempPass),
             'type'  => $request->user_type,
+            'verified'  => 1,
         ]);
 
         if($user->type == '3')
